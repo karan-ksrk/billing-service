@@ -24,7 +24,7 @@ app.conf.beat_schedule = {
     },
     "send-invoice-reminders": {
         "task": "api.tasks.send_invoice_reminders",
-        # "schedule": crontab(hour=9, minute=0),  # Run daily at 09:00
+        "schedule": crontab(hour=9, minute=0),  # Run daily at 09:00
         "schedule": crontab(minute='*/1'),
     },
 }

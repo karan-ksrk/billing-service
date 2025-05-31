@@ -65,16 +65,22 @@ def generate_daily_invoice():
 def mark_overdue_invoices():
     now = timezone.now()
     invoices = Invoice.objects.filter(status='unpaid', due_date__lt=now)
-
     for inv in invoices:
-        inv.status = 'overdue',
+        inv.status = 'overdue'
         inv.save()
         print(f'Invoice {inv.id} marked as overdue.')
+        # cancel subscription if overdue for more than 7 days
+        if now - inv.due_date > timedelta(days=7):
+            sub = inv.subscription
+            sub.status = 'cancelled'
+            sub.save()
+            # send mail or notification to user about subscription expired
+            print(f'Subscription {sub.id} for user {sub.user.username} cancelled due to overdue invoice.')
 
 
 @shared_task
 def send_invoice_reminders():
-    overdue = Invoice.objects.filter(status='overdue')
+    overdue = Invoice.objects.filter(status='overdue', subscription__status='active')
 
     for inv in overdue:
         print(f"Reminder: Invoice {inv.id} for {inv.user.username} is overdue.")
