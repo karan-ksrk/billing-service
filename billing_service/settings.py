@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-v*))-bv#58ui0=x_b#ba_+^wjm3w)kic&(8msn)9%a_z7l3l_s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -155,3 +155,11 @@ AUTH_USER_MODEL = 'api.MyUser'  # using custom user model inside api app
 
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'chasedorder3@gmail.com'
+EMAIL_HOST_PASSWORD = 'iqnn hnig stun oczk'  # past the key or password app here
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'chasedorder3+billing_service@gmail.com'

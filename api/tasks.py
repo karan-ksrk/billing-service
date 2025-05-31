@@ -3,6 +3,7 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import Subscription, Invoice
 from dateutil.relativedelta import relativedelta
+from api.mails.send_subsciption_overdue_email import send_subscription_overdue_email
 
 
 @shared_task
@@ -83,4 +84,8 @@ def send_invoice_reminders():
     overdue = Invoice.objects.filter(status='overdue', subscription__status='active')
 
     for inv in overdue:
+        send_subscription_overdue_email.delay(
+            user_email=inv.user.email,
+            subscription_id=inv.subscription.id
+        )
         print(f"Reminder: Invoice {inv.id} for {inv.user.username} is overdue.")

@@ -8,6 +8,7 @@ from .models import Plan, Subscription, Invoice
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.response import Response
 
 
 class PlanListView(APIView):
@@ -24,6 +25,11 @@ class SignupView(APIView):
     View to handle user registration.
     """
     permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        # This allows the Browsable API to render the form
+        serializer = RegisterUserSerializer()
+        return Response(serializer.data)
 
     def post(self, request):
         serializer = RegisterUserSerializer(data=request.data)
@@ -85,7 +91,7 @@ class UnSubscriptionView(APIView):
     """
     View to handle subscription cancellation.
     """
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
@@ -123,7 +129,7 @@ class InvoiceListView(APIView):
     """
     View to list all invoices for the authenticated user.
     """
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
