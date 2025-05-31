@@ -5,7 +5,26 @@ from .models import MyUser, Subscription, Plan, Invoice
 class MyUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
-        fields = ['id', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'date_joined']
+        fields = ['id', 'email', 'is_active', 'username']
+
+
+class RegisterUserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=8, max_length=20)
+
+    class Meta:
+        model = MyUser
+        fields = ["email", "username", "password"]
+
+    def validate(self, attrs):
+        email = attrs.get("email")
+        username = attrs.get("username")
+
+        if not username.isalnum():
+            raise serializers.ValidationError(self.default_error_messages)
+        return attrs
+
+    def create(self, validated_data):
+        return MyUser.objects.create_user(**validated_data)
 
 
 class PlanSerializer(serializers.ModelSerializer):

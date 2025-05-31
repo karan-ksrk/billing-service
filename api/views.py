@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import MyUserSerializer, SubscriptionSerializer, PlanSerializer, InvoiceSerializer
+from .serializers import RegisterUserSerializer, SubscriptionSerializer, PlanSerializer, InvoiceSerializer
 from rest_framework import permissions, authentication, status
 from django.http import JsonResponse
 from rest_framework import viewsets
 from .models import Plan, Subscription, Invoice
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class PlanListView(APIView):
@@ -20,22 +21,23 @@ class PlanListView(APIView):
 
 class SignupView(APIView):
     """
-    View to handle user signup.
+    View to handle user registration.
     """
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        serializer = MyUserSerializer(data=request.data)
+        serializer = RegisterUserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            return JsonResponse({'user': user.id}, status=201)
-        return JsonResponse({'errors': serializer.errors}, status=400)
+            return JsonResponse({'message': 'User created successfully', 'user_id': user.id}, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SubscriptionView(APIView):
     """
     View to handle subscription creation.
     """
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
@@ -107,7 +109,7 @@ class SubscriptionListView(APIView):
     """
     View to list all subscriptions for the authenticated user.
     """
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
