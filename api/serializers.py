@@ -48,4 +48,4 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Invoice
-        fields = ['id', 'user', 'subscription', 'amount', 'issue_date', 'due_date', 'status']
+        fields = ['id', 'user', 'subscription', 'amount', 'issue_date', 'due_date', 'status', 'razorpay_order_id']
