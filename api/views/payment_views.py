@@ -56,7 +56,6 @@ class CreateRazorPayInvoiceOrderView(APIView):
         print(type(request.user))
         try:
             invoice_id = request.POST.get('invoice_id')
-            print(invoice_id)
             invoice = Invoice.objects.get(id=invoice_id, user=user, status='unpaid')
         except Invoice.DoesNotExist:
             return JsonResponse({"error": "Invoice not found or already paid"}, status=400)

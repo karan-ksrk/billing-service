@@ -39,7 +39,6 @@ class SubscriptionView(APIView):
             return JsonResponse({'error': f'You already have an active subscription for {existing_subscription.plan.name}.'}, status=400)
 
         # create new subscription
-
         start_date = timezone.now()
         end_date = start_date + relativedelta(months=plan.duration)
         subscription = Subscription.objects.create(
