@@ -244,6 +244,41 @@ python manage.py test api.tests.api_test.payment_test
 
 ---
 
+## ✅ Celery Task Functionality Tests
+
+These test cases cover the behavior of asynchronous background tasks used for invoicing and subscription management.
+
+---
+
+- **`generate_daily_invoice()`**
+
+  - Generates an invoice for active subscriptions when the current billing cycle ends.
+  - Mocks the current date to simulate invoice generation after the subscription start.
+  - Verifies that a new unpaid invoice is created.
+
+- **`mark_overdue_invoices()`**
+
+  - Updates status of invoices past their due date from `unpaid` to `overdue`.
+  - Ensures correct invoice status update logic.
+
+- **`mark_overdue_invoices()` with subscription cancellation**
+
+  - If the invoice is overdue and a grace period has passed, the related subscription is cancelled.
+  - Verifies both invoice status and subscription status updates.
+
+- **`send_invoice_reminders()`**
+
+  - Sends reminder emails for overdue invoices using a Celery task.
+  - Mocks the email sending task to verify the reminder is triggered only for overdue invoices.
+
+---
+
+### 🧪 How to Run
+
+```bash
+python manage.py test api.tests.celery_test
+```
+
 ---
 
 ## ✅Postman Collection link for API Testing

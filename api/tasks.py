@@ -14,10 +14,11 @@ def generate_daily_invoice():
     for sub in active_subs:
         plan_duration_months = sub.plan.duration  # duration in months
         start_date = sub.start_date.date()
-        end_date = sub.end_date.date()
+        # end_date = sub.end_date.date()
 
         # if subscription is not active today, skip it
-        if today < start_date or today > end_date:
+        # if today < start_date or today > end_date:
+        if today < start_date:
             continue
 
         ''' 
@@ -59,6 +60,8 @@ def generate_daily_invoice():
             billing_period_start=cycle_start,  # new billing cycle start date
             billing_period_end=cycle_end,  # new billing cycle end
         )
+        sub.end_date = cycle_end  # update subscription end date
+        sub.save()  # save the updated subscription
         print(f"Invoice created for user: {sub.user.username} ({cycle_start} - {cycle_end})")
 
 
