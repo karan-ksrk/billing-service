@@ -1,11 +1,14 @@
 import os
 from celery import Celery
 from celery.schedules import crontab
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "billing_service.settings")
 
-app = Celery("billing_service", broker="redis://localhost:6379/0")
+app = Celery("billing_service", broker=os.getenv("CELERY_BROKER_URL"))
 
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
