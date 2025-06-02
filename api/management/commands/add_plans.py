@@ -9,20 +9,20 @@ class Command(BaseCommand):
         plans = [
             {
                 "name": "Basic",
-                "price": 9.99,
+                "price": 499,
                 "description": "Basic plan with limited features.",
                 "duration": 1,
             },
             {
-                "name": "Standard",
-                "price": 29.99,
-                "description": "Standard plan with more features.",
+                "name": "Pro",
+                "price": 999,
+                "description": "Pro plan with more features.",
                 "duration": 3,
             },
             {
-                "name": "Premium",
-                "price": 99.99,
-                "description": "Premium plan with all features.",
+                "name": "Enterprise",
+                "price": 4999,
+                "description": "Enterprise plan with all features.",
                 "duration": 12,
             },
         ]
